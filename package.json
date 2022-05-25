@@ -1,0 +1,29 @@
+{
+  "name": "barterify-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deinsteins/Barterify-API.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deinsteins/Barterify-API/issues"
+  },
+  "homepage": "https://github.com/deinsteins/Barterify-API#readme",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "bcrypt": "^4.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^7.4.3",
+    "mongoose": "^6.3.4"
+  }
+}
