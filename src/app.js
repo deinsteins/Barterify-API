@@ -3,6 +3,9 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
+const { error } = require("./middleware/error");
+
+
 const users = require("./routes/userRoute");
 const profiles = require("./routes/profileRoute")
 
@@ -20,6 +23,8 @@ app.use(express.json());
 
 app.use(`${base_url}/users`, users);
 app.use(`${base_url}/profiles`, profiles);
+
+app.use(error);
 
 app.get('/', (req, res) => {
   res.json({
