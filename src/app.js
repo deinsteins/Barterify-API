@@ -3,6 +3,9 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
+const users = require("./routes/userRoute");
+const profiles = require("./routes/profileRoute")
+
 
 const corsOptions = {
     origin: 'http://localhost:3000',
@@ -14,6 +17,9 @@ const app = express();
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+app.use(`${base_url}/users`, users);
+app.use(`${base_url}/profiles`, profiles);
 
 app.get('/', (req, res) => {
   res.json({
