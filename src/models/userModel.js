@@ -144,7 +144,6 @@ UserSchema.pre("save", function (next) {
       lastname: "",
       gender: "",
       phone: "",
-      age: "",
       address: "",
     });
     generatedProfile.save().then((profile) => {
@@ -168,7 +167,7 @@ UserSchema.methods.toJSON = function () {
   const user = this.toObject();
 
   const { email, username, profile } = user;
-  const { firstname, lastname, gender, phone, age, address } = profile;
+  const { firstname, lastname, gender, phone, address } = profile;
 
   return {
     email,
@@ -178,7 +177,6 @@ UserSchema.methods.toJSON = function () {
       lastname,
       gender,
       phone,
-      age,
       address,
     },
   };

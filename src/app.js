@@ -11,7 +11,7 @@ const profiles = require("./routes/profileRoute")
 
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:9000',
 }
 
 const base_url = "/api";

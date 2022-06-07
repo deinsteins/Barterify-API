@@ -25,9 +25,6 @@ const ProfileSchema = new Schema({
   phone: {
     type: Number,
   },
-  age: {
-    type: String,
-  },
   address: {
     type: "String"
   },

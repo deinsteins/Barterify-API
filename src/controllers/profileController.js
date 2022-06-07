@@ -13,7 +13,7 @@ const getProfile = async (req, res, next) => {
 
 const editProfile = async (req, res, next) => {
   const user = req.user;
-  const { firstname, lastname, gender, phone, age, address } = req.body;
+  const { firstname, lastname, gender, phone, address } = req.body;
 
   const profile = await Profile.findOneAndUpdate(
     { user: user._id },
@@ -23,7 +23,6 @@ const editProfile = async (req, res, next) => {
         lastname,
         gender,
         phone,
-        age,
         address,
       },
     }
