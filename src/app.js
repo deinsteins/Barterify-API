@@ -1,5 +1,6 @@
 const mongoose = require("./config/db");
 const express = require("express");
+const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 
@@ -18,8 +19,10 @@ const base_url = "/api";
 const PORT = process.env.PORT || 3000;
 const app = express();
 
+app.use(morgan("dev"));
 app.use(cors(corsOptions));
 app.use(express.json());
+
 
 app.use(`${base_url}/users`, users);
 app.use(`${base_url}/profiles`, profiles);
