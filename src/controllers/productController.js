@@ -28,10 +28,8 @@ const createProduct = async (req, res) => {
     quantity,
     details,
     location,
-    user: { 
-      userId: user._id,
-      userName: user.username,
-    },
+    user: user._id,
+    username: user.username,
   });
 
   const product = await newProduct.save();
@@ -90,7 +88,6 @@ const getUserProduct = async (req, res) => {
   const id = req.params.id;
 
   if (!isValidObjectId(id)) throw new AppError("product id is not valid", 400);
-
   const product = await Product.findOne({
     user: user._id,
     _id: id,
@@ -135,10 +132,8 @@ const editProduct = async (req, res) => {
         details,
         media,
         location,
-        user: { 
-          userId: user._id,
-          userName: user.username,
-        },
+        user: user._id,
+        username: user.username,
       },
     }
   );
@@ -158,7 +153,6 @@ const deleteProduct = async (req, res) => {
 
   const product = await Product.findOneAndDelete({
     _id: id,
-    user: req.user._id,
   });
 
   if (!product) throw new AppError("product not found", 404);

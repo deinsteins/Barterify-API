@@ -13,28 +13,19 @@ const ProductSchema = new Schema(
       required: true,
     },
     user: {
-      userId: {
         type: ObjectID,
         ref: "user",
-      },
-      userName: {
+    },
+    username: {
         type: String,
         ref: "user",
-      },
     },
     category: {
-      categoryId: {
         type: ObjectID,
         ref: "productCategory",
-      },
-      categoryName: {
-        type: String,
-        ref: "productCategory",
-      }
     },
     quantity: {
       type: String,
-      required: true,
     },
     details: {
       description: String,
