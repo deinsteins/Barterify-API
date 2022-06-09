@@ -8,6 +8,9 @@ const ProductSchema = new Schema(
       type: String,
       required: true,
     },
+    image:{
+      type: String
+    },
     price: {
       type: Number,
       required: true,
@@ -27,13 +30,13 @@ const ProductSchema = new Schema(
     quantity: {
       type: String,
     },
-    details: {
-      description: String,
-      dateOfPurchase: Date,
-      purchaseCondition: String,
-      model: String,
-      weight: String,
-      color: String,
+    description: {
+      type: String,
+      required: true,
+    },
+    dateOfPurchase: {
+      type: Date,
+      required: true,
     },
     likes: [
       {
