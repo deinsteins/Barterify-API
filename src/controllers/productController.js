@@ -1,10 +1,24 @@
+const multer = require("multer");
 const { ObjectID } = require("mongodb");
 const mongoose = require('mongoose');
 const isValidObjectId = mongoose.Types.ObjectId.isValid;
 const Product = require("../models/productModels.js");
 const AppError = require("../utils/AppError.js");
 
+// SET STORAGE
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, './uploads');
+    },
+  filename: function (req, file, cb) {
+      cb(null, file.originalname);
+  }
+});
+
+const uploadImg = multer({storage: storage}).single('image');
+
 const createProduct = async (req, res) => {
+  const productImg = req.file.path ;
   const user = req.user;
   const productId = new ObjectID();
 
@@ -13,7 +27,8 @@ const createProduct = async (req, res) => {
     price,
     category,
     quantity,
-    details,
+    description,
+    dateOfPurchase,
     location,
   } = req.body;
 
@@ -23,10 +38,12 @@ const createProduct = async (req, res) => {
   const newProduct = new Product({
     _id: productId,
     name,
+    image: productImg,
     price,
     category,
     quantity,
-    details,
+    description,
+    dateOfPurchase,
     location,
     user: user._id,
     username: user.username,
@@ -104,6 +121,7 @@ const getUserProduct = async (req, res) => {
 const editProduct = async (req, res) => {
   const user = req.user;
   const id = req.params.id;
+  const productImg = req.file.path ;
 
   if( !isValidObjectId(id) )  throw new AppError("product id is not valid", 400);
 
@@ -113,8 +131,8 @@ const editProduct = async (req, res) => {
     price,
     category,
     quantity,
-    details,
-    media,
+    description,
+    dateOfPurchase,
     location,
   } = req.body;
 
@@ -126,11 +144,12 @@ const editProduct = async (req, res) => {
     {
       $set: {
         name,
+        image: productImg,
         price,
         category,
         quantity,
-        details,
-        media,
+        description,
+        dateOfPurchase,
         location,
         user: user._id,
         username: user.username,
@@ -171,4 +190,5 @@ module.exports = {
   getUserProduct,
   editProduct,
   deleteProduct,
+  uploadImg,
 };

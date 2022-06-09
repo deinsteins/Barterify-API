@@ -31,7 +31,7 @@ app.use(`${base_url}/users`, users);
 app.use(`${base_url}/profiles`, profiles);
 app.use(`${base_url}/products`, products);
 app.use(`${base_url}/products-categories`, productCategory);
-
+app.use('/uploads', express.static('./uploads'));
 
 app.use(error);
 
