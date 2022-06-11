@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const isValidObjectId = mongoose.Types.ObjectId.isValid;
 const Product = require("../models/productModels.js");
 const AppError = require("../utils/AppError.js");
+const fs = require('fs')
 
 // SET STORAGE
 const storage = multer.diskStorage({
@@ -121,13 +122,12 @@ const getUserProduct = async (req, res) => {
 const editProduct = async (req, res) => {
   const user = req.user;
   const id = req.params.id;
-  const productImg = req.file.path ;
 
   if( !isValidObjectId(id) )  throw new AppError("product id is not valid", 400);
 
-
   const {
     name,
+    image,
     price,
     category,
     quantity,
@@ -139,41 +139,65 @@ const editProduct = async (req, res) => {
   if (!isValidObjectId(category))
     throw new AppError("Category is not valid", 400);
 
-  const updatedProduct = await Product.findOneAndUpdate(
-    { user: user._id, _id: id },
-    {
-      $set: {
-        name,
-        image: productImg,
-        price,
-        category,
-        quantity,
-        description,
-        dateOfPurchase,
-        location,
-        user: user._id,
-        username: user.username,
-      },
+    if(image){
+      const updatedProduct = await Product.findOneAndUpdate(
+        { user: user._id, _id: id },
+        {
+          $set: {
+            name,
+            image,
+            price,
+            category,
+            quantity,
+            description,
+            dateOfPurchase,
+            location,
+            user: user._id,
+            username: user.username,
+          },
+        }
+      );
+      if (!updatedProduct) throw new AppError("product not found", 404);
+      res.status(201).json({
+        success: true,
+        data: updatedProduct,
+      });
+    } else {
+      const productImg = req.file.path ;
+      const updatedProduct = await Product.findOneAndUpdate(
+        { user: user._id, _id: id },
+        {
+          $set: {
+            name,
+            image: productImg,
+            price,
+            category,
+            quantity,
+            description,
+            dateOfPurchase,
+            location,
+            user: user._id,
+            username: user.username,
+          },
+        }
+      );
+      if (!updatedProduct) throw new AppError("product not found", 404);
+      res.status(201).json({
+        success: true,
+        data: updatedProduct,
+      });
     }
-  );
-
-  if (!updatedProduct) throw new AppError("product not found", 404);
-
-  res.status(201).json({
-    success: true,
-    data: updatedProduct,
-  });
 };
 
 const deleteProduct = async (req, res) => {
   const id = req.params.id;
 
   if (!isValidObjectId(id)) throw new AppError("product id is not valid", 400);
-
+  
   const product = await Product.findOneAndDelete({
     _id: id,
   });
-
+  
   if (!product) throw new AppError("product not found", 404);
 
   res.send({
