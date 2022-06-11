@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const isValidObjectId = mongoose.Types.ObjectId.isValid;
 const Product = require("../models/productModels.js");
 const AppError = require("../utils/AppError.js");
-const fs = require('fs')
 
 // SET STORAGE
 const storage = multer.diskStorage({
@@ -27,6 +26,7 @@ const createProduct = async (req, res) => {
     name,
     price,
     category,
+    categoryName,
     quantity,
     description,
     dateOfPurchase,
@@ -42,6 +42,7 @@ const createProduct = async (req, res) => {
     image: productImg,
     price,
     category,
+    categoryName,
     quantity,
     description,
     dateOfPurchase,

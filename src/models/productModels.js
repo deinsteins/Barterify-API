@@ -27,6 +27,10 @@ const ProductSchema = new Schema(
         type: ObjectID,
         ref: "productCategory",
     },
+    categoryName: {
+      type: String,
+      ref: "productCategory",
+    },
     quantity: {
       type: String,
     },
