@@ -1,6 +1,9 @@
-const multer = require("multer");
 const { ObjectID } = require("mongodb");
 const mongoose = require('mongoose');
+const multer = require("multer");
+const sharp = require('sharp');
+const fs = require('fs');
+const path = require('path');
 const isValidObjectId = mongoose.Types.ObjectId.isValid;
 const Product = require("../models/productModels.js");
 const AppError = require("../utils/AppError.js");
@@ -11,14 +14,35 @@ const storage = multer.diskStorage({
       cb(null, './uploads');
     },
   filename: function (req, file, cb) {
-      cb(null, file.originalname);
+      cb(null, file.originalname.slice(0, -4) + '-' + Date.now() + '.webp');
   }
 });
 
 const uploadImg = multer({storage: storage}).single('image');
 
+const compressImage = async (req, res, next ) => {
+  const { filename: image } = req.file;
+  let img = '';
+  await sharp(req.file.path)
+   .resize(600, 600)
+   .webp({ quality: 60 })
+   .toFile(
+      img = path.resolve(req.file.destination, 'temp', image)
+   )
+   fs.unlinkSync(req.file.path)
+   const oldPath = img;
+   const newPath = req.file.path;
+
+    fs.rename(oldPath, newPath, function (err) {
+      if (err) throw err
+      console.log('Successfully moved!')
+    })
+   next();
+}
+
 const createProduct = async (req, res) => {
-  const productImg = req.file.path ;
+  const productImg = req.file.path;
+  console.log(productImg);
   const user = req.user;
   const productId = new ObjectID();
 
@@ -216,4 +240,5 @@ module.exports = {
   editProduct,
   deleteProduct,
   uploadImg,
+  compressImage,
 };
