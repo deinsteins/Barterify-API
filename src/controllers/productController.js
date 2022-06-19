@@ -88,7 +88,29 @@ const createProduct = async (req, res) => {
 };
 
 const getAllProducts = async (req, res) => {
-  const products = await Product.find();
+  const queries = req.query;
+  const { page, sortBy, limit, price, category, name, location } = queries;
+  const match = {};
+  const sort = {};
+
+  if (price) match.price = price;
+  if (category) match.category = category;
+  if (name) match.name = name;
+  if (location) match.location = location;
+
+  if (sortBy) {
+    const parts = sortBy.split(":");
+    const key = parts[0];
+    const value = parts[1] === "desc" ? -1 : 1;
+
+    sort[key] = value;
+  }
+
+  const products = await Product.find(match)
+    .skip(parseInt(page))
+    .limit(parseInt(limit))
+    .sort(sort);
+
   res.json({
     success: true,
     data: products,
