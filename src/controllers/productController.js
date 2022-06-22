@@ -95,10 +95,10 @@ const getAllProducts = async (req, res) => {
   const { page, sortBy, limit, price, category, name, location } = queries;
   const match = {};
   const sort = {};
+  const searchQuery = {name: new RegExp(name)};
 
   if (price) match.price = price;
   if (category) match.category = category;
-  if (name) match.name = name;
   if (location) match.location = location;
 
   if (sortBy) {
@@ -109,15 +109,23 @@ const getAllProducts = async (req, res) => {
     sort[key] = value;
   }
 
-  const products = await Product.find(match)
+  if (name) {
+    const productsSearch = await Product.find(searchQuery);
+    res.json({
+      success: true,
+      data: productsSearch,
+    });
+  } else {
+    const products = await Product.find(match)
     .skip(parseInt(page))
     .limit(parseInt(limit))
     .sort(sort);
 
-  res.json({
-    success: true,
-    data: products,
-  });
+    res.json({
+      success: true,
+      data: products,
+    });
+  }
 };
 
 const getProduct = async (req, res) => {
