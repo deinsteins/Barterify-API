@@ -3,7 +3,6 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
-
 const { error } = require("./middleware/error");
 
 
@@ -11,8 +10,6 @@ const users = require("./routes/userRoute");
 const profiles = require("./routes/profileRoute")
 const products = require("./routes/productRoute");
 const productCategory = require("./routes/productCategoryRoute");
-
-
 
 const corsOptions = {
     origin: 'http://localhost:9000',
@@ -22,6 +19,36 @@ const base_url = "/api";
 const PORT = process.env.PORT || 3000;
 const app = express();
 
+const io = require('socket.io')( 8000, {   // SOCKET PORT
+  cors: {                                 // CROSS ORIGIN PERMISSION FOR CLIENT ADDRESS
+    origin: ['http://localhost:9000'],    
+  },
+});
+
+// DECLARING ARRAY OF users
+const connectedUser = {};
+
+io.on('connection', socket =>{
+
+    // SERVER FUNCTION TO RESPONSE NEW USER
+    socket.on('new-user-joined', userName =>{
+      connectedUser[socket.id] = userName;
+      socket.broadcast.emit('user-joined', {newUserName: connectedUser[socket.id], newUserId: socket.id});
+    });
+
+    // SERVER FUNCTION TO HANDLE MESSAGES
+    socket.on('message-sended', messageSended =>{
+      socket.broadcast.emit('message-received', {message: messageSended, senderName: connectedUser[socket.id], senderId: socket.id});
+    });
+
+    // SERVER FUNCTION ON DISCONNECTION OF USER
+    socket.on('disconnect', message =>{
+      socket.broadcast.emit('user-left', {leftUserName: connectedUser[socket.id], leftUserId: socket.id});
+      delete connectedUser[socket.id];
+  });
+
+  });
+  
 app.use(morgan("dev"));
 app.use(cors(corsOptions));
 app.use(express.json());
