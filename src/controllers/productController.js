@@ -21,28 +21,29 @@ const storage = multer.diskStorage({
 const uploadImg = multer({storage: storage}).single('image');
 
 const compressImage = async (req, res, next ) => {
-  const { filename: image } = req.file;
-  let img = '';
-  await sharp(req.file.path)
-   .resize(600, 600)
-   .webp({ quality: 60 })
-   .toFile(
-      img = path.resolve(req.file.destination, 'temp', image)
-   )
-   fs.unlinkSync(req.file.path)
-   const oldPath = img;
-   const newPath = req.file.path;
+  if (req.file) {
+    const { filename: image } = req.file;
+    let img = '';
+    await sharp(req.file.path)
+    .resize(600, 600)
+    .webp({ quality: 60 })
+    .toFile(
+        img = path.resolve(req.file.destination, 'temp', image)
+    )
+    fs.unlinkSync(req.file.path)
+    const oldPath = img;
+    const newPath = req.file.path;
 
-    fs.rename(oldPath, newPath, function (err) {
-      if (err) throw err
-      console.log('Successfully moved!')
-    })
+      fs.rename(oldPath, newPath, function (err) {
+        if (err) throw err
+        console.log('Successfully moved!')
+      })
+    }
    next();
 }
 
 const createProduct = async (req, res) => {
   const productImg = req.file.path;
-  console.log(productImg);
   const user = req.user;
   const productId = new ObjectID();
 
@@ -55,6 +56,7 @@ const createProduct = async (req, res) => {
     description,
     dateOfPurchase,
     location,
+    waNumber,
   } = req.body;
 
   if (!isValidObjectId(category))
@@ -73,6 +75,7 @@ const createProduct = async (req, res) => {
     location,
     user: user._id,
     username: user.username,
+    waNumber,
   });
 
   const product = await newProduct.save();
@@ -176,6 +179,7 @@ const editProduct = async (req, res) => {
     name,
     image,
     price,
+    waNumber,
     category,
     quantity,
     description,
@@ -194,6 +198,7 @@ const editProduct = async (req, res) => {
             name,
             image,
             price,
+            waNumber,
             category,
             quantity,
             description,
@@ -201,6 +206,7 @@ const editProduct = async (req, res) => {
             location,
             user: user._id,
             username: user.username,
+            phone: user.phone,
           },
         }
       );
@@ -218,6 +224,7 @@ const editProduct = async (req, res) => {
             name,
             image: productImg,
             price,
+            waNumber,
             category,
             quantity,
             description,
@@ -225,6 +232,7 @@ const editProduct = async (req, res) => {
             location,
             user: user._id,
             username: user.username,
+            phone: user.phone,
           },
         }
       );

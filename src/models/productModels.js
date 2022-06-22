@@ -23,6 +23,9 @@ const ProductSchema = new Schema(
         type: String,
         ref: "user",
     },
+    waNumber: {
+      type: Number,
+    },
     category: {
         type: ObjectID,
         ref: "productCategory",
