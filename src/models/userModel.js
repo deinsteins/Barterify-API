@@ -47,10 +47,10 @@ const UserSchema = new Schema(
         ref: "product",
       },
     ],
-    services: [
+    barters: [
       {
         type: Schema.Types.ObjectId,
-        ref: "service",
+        ref: "barter",
       },
     ],
   },
@@ -145,6 +145,7 @@ UserSchema.pre("save", function (next) {
       gender: "",
       phone: "",
       address: "",
+      createdSince: user.createdAt,
     });
     generatedProfile.save().then((profile) => {
       user.profile = profile._id;
@@ -167,7 +168,7 @@ UserSchema.methods.toJSON = function () {
   const user = this.toObject();
 
   const { email, username, profile } = user;
-  const { firstname, lastname, gender, phone, address } = profile;
+  const { firstname, lastname, gender, phone, address, createdSince } = profile;
 
   return {
     email,
@@ -178,6 +179,7 @@ UserSchema.methods.toJSON = function () {
       gender,
       phone,
       address,
+      createdSince,
     },
   };
 };

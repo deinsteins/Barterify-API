@@ -32,6 +32,9 @@ const ProfileSchema = new Schema({
     ref: "user",
     type: Schema.Types.ObjectId,
   },
+  createdSince: {
+    type: Date,
+  },
   isBanned: {
     type: Boolean,
   },

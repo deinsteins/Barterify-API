@@ -3,16 +3,16 @@ const asyncHandler = require("../utils/asyncHandler");
 const AppError = require("../utils/AppError");
 
 const Register = asyncHandler(async (req, res) => {
-  const { email, username, password, password_confirmation } = req.body;
+  const { email, username, password, passwordConfirm } = req.body;
 
-  if (password !== password_confirmation)
+  if (password !== passwordConfirm)
     throw new AppError("Password tidak sesuai", 400);
 
   const newUser = new User({
     email,
     username,
     password,
-    password_confirmation,
+    passwordConfirm,
   });
   const user = await newUser.save();
 
