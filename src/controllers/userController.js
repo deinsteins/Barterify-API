@@ -71,7 +71,7 @@ const PasswordReset = asyncHandler(async (req, res) => {
 
   res.status(201).json({
     success: true,
-    message: "Reset password berhasil",
+    message: "Password berhasil di ubah",
   });
 });
 

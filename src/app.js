@@ -10,6 +10,7 @@ const users = require("./routes/userRoute");
 const profiles = require("./routes/profileRoute")
 const products = require("./routes/productRoute");
 const productCategory = require("./routes/productCategoryRoute");
+const barters = require("./routes/barterRoute");
 
 const corsOptions = {
     origin: 'http://localhost:9000',
@@ -58,6 +59,7 @@ app.use(`${base_url}/users`, users);
 app.use(`${base_url}/profiles`, profiles);
 app.use(`${base_url}/products`, products);
 app.use(`${base_url}/products-categories`, productCategory);
+app.use(`${base_url}/barters`, barters);
 app.use('/uploads', express.static('./uploads'));
 
 app.use(error);
