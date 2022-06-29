@@ -15,12 +15,13 @@ const barters = require("./routes/barterRoute");
 const base_url = "/api";
 const PORT = process.env.PORT || 3000;
 const app = express();
+const http = require('http').Server(app);
 
-const io = require('socket.io')( 8000, {   // SOCKET PORT
-  cors: {                                 // CROSS ORIGIN PERMISSION FOR CLIENT ADDRESS
-    origin: ['https://barterify.netlify.app/', 'https://barterify.vercel.app/'],    
-    credentials: true,
-  },
+const io = require("socket.io")(http, {
+  cors: {
+    origin: "https://barterify.netlify.app",
+    methods: ["GET", "POST"]
+  }
 });
 
 // DECLARING ARRAY OF users
@@ -67,7 +68,7 @@ app.get('/', (req, res) => {
   })
 });
 
-app.listen(PORT, () => {
+http.listen(PORT, () => {
   console.log(`Now listening on port: ${PORT}`);
 });
 
