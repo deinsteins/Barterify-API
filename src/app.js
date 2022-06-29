@@ -14,6 +14,7 @@ const barters = require("./routes/barterRoute");
 
 const corsOptions = {
     origin: ['https://barterify.vercel.app/', 'https://barterify.netlify.app/', 'http://localhost:9000'],
+    credentials: true,
 }
 
 const base_url = "/api";
@@ -23,6 +24,7 @@ const app = express();
 const io = require('socket.io')( 8000 || process.env.SOCKET_PORT, {   // SOCKET PORT
   cors: {                                 // CROSS ORIGIN PERMISSION FOR CLIENT ADDRESS
     origin: ['http://localhost:9000', 'https://barterify.netlify.app/', 'https://barterify.vercel.app/'],    
+    credentials: true,
   },
 });
 
