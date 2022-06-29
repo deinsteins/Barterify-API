@@ -12,18 +12,13 @@ const products = require("./routes/productRoute");
 const productCategory = require("./routes/productCategoryRoute");
 const barters = require("./routes/barterRoute");
 
-const corsOptions = {
-    origin: ['https://barterify.vercel.app/', 'https://barterify.netlify.app/', 'http://localhost:9000'],
-    credentials: true,
-}
-
 const base_url = "/api";
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-const io = require('socket.io')( 8000 || process.env.SOCKET_PORT, {   // SOCKET PORT
+const io = require('socket.io')( 8000, {   // SOCKET PORT
   cors: {                                 // CROSS ORIGIN PERMISSION FOR CLIENT ADDRESS
-    origin: ['http://localhost:9000', 'https://barterify.netlify.app/', 'https://barterify.vercel.app/'],    
+    origin: ['https://barterify.netlify.app/', 'https://barterify.vercel.app/'],    
     credentials: true,
   },
 });
