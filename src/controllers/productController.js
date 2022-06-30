@@ -205,7 +205,8 @@ const editProduct = async (req, res) => {
         data: updatedProduct,
       });
     } else {
-      const productImg = req.file.path ;
+      const { filename: image } = req.file;
+      const productImg = cloudinary.url(`${image}.webp`, { width: 700, height: 600, crop: 'scale', quality: 70 });
       const updatedProduct = await Product.findOneAndUpdate(
         { user: user._id, _id: id },
         {
