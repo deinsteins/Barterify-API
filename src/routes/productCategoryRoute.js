@@ -10,7 +10,7 @@ const {
 
 router
   .route("/")
-  .get(authenticate, asyncHandler(getCategories))
+  .get(asyncHandler(getCategories))
   .post(authenticate,asyncHandler(createCategory));
 
 module.exports = router;
