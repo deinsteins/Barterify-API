@@ -12,13 +12,12 @@ const {
   editProduct,
   deleteProduct,
   uploadImg,
-  compressImage,
 } = require("../controllers/productController");
 
 router
   .route("/")
   .get(authenticate, asyncHandler(getUserAllProducts))
-  .post(authenticate, uploadImg, compressImage, asyncHandler(createProduct));
+  .post(authenticate, uploadImg, asyncHandler(createProduct));
 
 router.route("/all").get(asyncHandler(getAllProducts));
 router.route("/all/:id").get(asyncHandler(getProduct));
@@ -26,7 +25,7 @@ router.route("/all/:id").get(asyncHandler(getProduct));
 router
   .route("/:id")
   .get(authenticate, asyncHandler(getUserProduct))
-  .put(authenticate, uploadImg, compressImage, asyncHandler(editProduct))
+  .put(authenticate, uploadImg, asyncHandler(editProduct))
   .delete(authenticate, asyncHandler(deleteProduct));
 
 module.exports = router;

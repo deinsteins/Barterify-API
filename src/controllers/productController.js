@@ -1,49 +1,30 @@
 const { ObjectID } = require("mongodb");
 const mongoose = require('mongoose');
 const multer = require("multer");
-const sharp = require('sharp');
-const fs = require('fs');
-const path = require('path');
+const cloudinary = require("cloudinary").v2;
 const isValidObjectId = mongoose.Types.ObjectId.isValid;
 const Product = require("../models/productModels.js");
 const AppError = require("../utils/AppError.js");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-// SET STORAGE
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-      cb(null, './uploads');
-    },
-  filename: function (req, file, cb) {
-      cb(null, file.originalname.slice(0, -4) + '-' + Date.now() + '.webp');
-  }
+cloudinary.config({
+  cloud_name: "barterify",
+  api_key: "649787179552973",
+  api_secret: "511EmBfU2CY2oIXkHoO0qAvgBU0",
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "Barterify",
+  },
 });
 
 const uploadImg = multer({storage: storage}).single('image');
 
-const compressImage = async (req, res, next ) => {
-  if (req.file) {
-    const { filename: image } = req.file;
-    let img = '';
-    await sharp(req.file.path)
-    .resize(600, 600)
-    .webp({ quality: 60 })
-    .toFile(
-        img = path.resolve(req.file.destination, 'temp', image)
-    )
-    fs.unlinkSync(req.file.path)
-    const oldPath = img;
-    const newPath = req.file.path;
-
-      fs.rename(oldPath, newPath, function (err) {
-        if (err) throw err
-        console.log('Successfully moved!')
-      })
-    }
-   next();
-}
-
 const createProduct = async (req, res) => {
-  const productImg = req.file.path;
+  const { filename: image } = req.file;
+  const productImg = cloudinary.url(`${image}.webp`, { width: 700, height: 600, crop: 'scale', quality: 70 });
   const user = req.user;
   const productId = new ObjectID();
 
@@ -278,5 +259,4 @@ module.exports = {
   editProduct,
   deleteProduct,
   uploadImg,
-  compressImage,
-};
+  };
