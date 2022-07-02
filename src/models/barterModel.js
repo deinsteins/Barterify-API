@@ -46,7 +46,7 @@ const BarterSchema = new Schema(
     },
     status: {
         type: String,
-        default: "pending",
+        default: "terkirim",
     }
   },
   { timestamps: true }
